@@ -1,0 +1,7 @@
+{
+  "name": "TravelSplit - 旅遊分拆帳專家",
+  "description": "一個專業的旅遊分帳工具，支援多幣種即時換算、地點記錄、AI 收據辨識及智慧結算建議，讓旅程中的財務管理變得輕鬆透明。",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
