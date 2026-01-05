@@ -2,3 +2,4 @@
 1. 設定package.json，並安裝隊要套件
 2. 設計.gitignore，避免安上船不必要的資料夾，暫存檔，以及隱私黨
 3. 幫我執行專案，並確認功能符合需求
+4. 請幫我閱讀該app，並撰寫功能介紹文檔 by markdown in english for github page
