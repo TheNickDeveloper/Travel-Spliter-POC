@@ -1,15 +1,15 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { 
-  Plus, 
-  PieChart as PieChartIcon, 
-  Users, 
-  ArrowLeftRight, 
-  ChevronRight, 
-  MapPin, 
-  Calendar, 
-  Camera, 
-  Wallet, 
+import {
+  Plus,
+  PieChart as PieChartIcon,
+  Users,
+  ArrowLeftRight,
+  ChevronRight,
+  MapPin,
+  Calendar,
+  Camera,
+  Wallet,
   CheckCircle2,
   Trash2,
   AlertCircle,
@@ -22,13 +22,14 @@ import {
   Check,
   X,
   Info,
-  Circle
+  Circle,
+  Filter
 } from 'lucide-react';
-import { 
-  PieChart, 
-  Pie, 
-  Cell, 
-  ResponsiveContainer, 
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
   Tooltip as RechartsTooltip,
   Legend
 } from 'recharts';
@@ -40,14 +41,14 @@ const COLORS = ['#3B82F6', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6', '#6B7280'
 
 // --- Components ---
 
-const ExpenseDetailView = ({ 
-  expense, 
-  members, 
-  onClose, 
-  onDelete 
-}: { 
-  expense: Expense; 
-  members: Member[]; 
+const ExpenseDetailView = ({
+  expense,
+  members,
+  onClose,
+  onDelete
+}: {
+  expense: Expense;
+  members: Member[];
   onClose: () => void;
   onDelete: (id: string) => void;
 }) => {
@@ -63,8 +64,8 @@ const ExpenseDetailView = ({
             <X className="w-5 h-5" />
           </button>
           <h3 className="text-xl font-black text-slate-800">支出詳情</h3>
-          <button 
-            onClick={() => { onDelete(expense.id); onClose(); }} 
+          <button
+            onClick={() => { onDelete(expense.id); onClose(); }}
             className="p-2 bg-red-50 rounded-full text-red-400 hover:text-red-600"
           >
             <Trash2 className="w-5 h-5" />
@@ -120,8 +121,8 @@ const ExpenseDetailView = ({
             ))}
           </div>
         </div>
-        
-        <button 
+
+        <button
           onClick={onClose}
           className="w-full mt-8 py-4 bg-slate-900 text-white rounded-3xl font-black text-sm active:scale-95 transition-all shadow-xl"
         >
@@ -132,13 +133,13 @@ const ExpenseDetailView = ({
   );
 };
 
-const ExpenseForm = ({ 
-  trip, 
-  onSave, 
-  onCancel 
-}: { 
-  trip: Trip; 
-  onSave: (exp: Omit<Expense, 'id'>) => void; 
+const ExpenseForm = ({
+  trip,
+  onSave,
+  onCancel
+}: {
+  trip: Trip;
+  onSave: (exp: Omit<Expense, 'id'>) => void;
   onCancel: () => void;
 }) => {
   const [title, setTitle] = useState('');
@@ -170,7 +171,7 @@ const ExpenseForm = ({
           if (parsed.location) setLocation(parsed.location);
           if (parsed.date) setDate(parsed.date);
           if (parsed.category) {
-            const found = Object.values(Category).find(c => 
+            const found = Object.values(Category).find(c =>
               parsed.category.includes(c) || c.includes(parsed.category)
             );
             if (found) setCategory(found);
@@ -190,7 +191,7 @@ const ExpenseForm = ({
       <div className="flex justify-between items-center">
         <button onClick={onCancel} className="p-2 text-slate-500 hover:text-slate-900"><ChevronLeft /></button>
         <h2 className="text-xl font-black text-slate-800">記一筆支出</h2>
-        <button 
+        <button
           disabled={!title || !amount || loading}
           onClick={() => onSave({ title, amount: parseFloat(amount), currency, category, payerId: payer, participants, location, date })}
           className={`px-6 py-2 rounded-full font-bold shadow-sm transition-all ${(!title || !amount || loading) ? 'bg-slate-200 text-slate-400' : 'bg-blue-600 text-white active:scale-95'}`}
@@ -220,19 +221,19 @@ const ExpenseForm = ({
         <div className="bg-white p-5 rounded-[32px] shadow-sm border border-slate-100 space-y-4">
           <div>
             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 block px-1">支出名稱</label>
-            <input 
-              type="text" 
-              placeholder="支出項目名稱" 
+            <input
+              type="text"
+              placeholder="支出項目名稱"
               className="w-full text-lg font-bold border border-slate-100 bg-slate-50 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
               value={title}
               onChange={e => setTitle(e.target.value)}
             />
           </div>
-          
+
           <div className="flex gap-4">
             <div className="w-28">
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 block px-1">幣別</label>
-              <select 
+              <select
                 className="w-full bg-slate-50 border border-slate-100 px-3 py-3.5 rounded-2xl text-sm font-bold outline-none"
                 value={currency}
                 onChange={e => setCurrency(e.target.value)}
@@ -242,9 +243,9 @@ const ExpenseForm = ({
             </div>
             <div className="flex-1">
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 block px-1">金額</label>
-              <input 
-                type="number" 
-                placeholder="0.00" 
+              <input
+                type="number"
+                placeholder="0.00"
                 className="w-full text-xl font-black border border-slate-100 bg-slate-50 rounded-2xl px-4 py-3.5 focus:ring-2 focus:ring-blue-500/20 outline-none"
                 value={amount}
                 onChange={e => setAmount(e.target.value)}
@@ -256,7 +257,7 @@ const ExpenseForm = ({
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm">
             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 block">類別</label>
-            <select 
+            <select
               className="w-full bg-slate-50 border border-slate-100 px-3 py-2.5 rounded-xl text-sm font-medium outline-none"
               value={category}
               onChange={e => setCategory(e.target.value as Category)}
@@ -266,20 +267,20 @@ const ExpenseForm = ({
           </div>
           <div className="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm">
             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5 block">日期</label>
-            <input 
-              type="date" 
-              value={date} 
-              onChange={e => setDate(e.target.value)} 
-              className="w-full bg-slate-50 border border-slate-100 px-3 py-2.5 rounded-xl text-sm font-medium outline-none" 
+            <input
+              type="date"
+              value={date}
+              onChange={e => setDate(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-100 px-3 py-2.5 rounded-xl text-sm font-medium outline-none"
             />
           </div>
         </div>
 
         <div className="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-3">
           <MapPin className="w-5 h-5 text-slate-400 shrink-0" />
-          <input 
-            type="text" 
-            placeholder="地點 (選填)" 
+          <input
+            type="text"
+            placeholder="地點 (選填)"
             className="flex-1 bg-slate-50 border border-slate-100 px-4 py-2.5 rounded-xl text-sm font-medium outline-none"
             value={location}
             onChange={e => setLocation(e.target.value)}
@@ -305,7 +306,7 @@ const ExpenseForm = ({
         <div className="space-y-3 px-1">
           <div className="flex justify-between items-center">
             <label className="text-sm font-black text-slate-600">平分對象</label>
-            <button 
+            <button
               onClick={() => setParticipants(participants.length === trip.members.length ? [] : trip.members.map(m => m.id))}
               className="text-[10px] font-black text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full uppercase tracking-widest"
             >
@@ -330,13 +331,13 @@ const ExpenseForm = ({
   );
 };
 
-const MembersView = ({ 
-  members, 
-  onAdd, 
-  onRemove 
-}: { 
-  members: Member[]; 
-  onAdd: (name: string) => void; 
+const MembersView = ({
+  members,
+  onAdd,
+  onRemove
+}: {
+  members: Member[];
+  onAdd: (name: string) => void;
   onRemove: (id: string) => void;
 }) => {
   const [name, setName] = useState('');
@@ -355,15 +356,15 @@ const MembersView = ({
           <UserPlus className="w-5 h-5 text-blue-500" /> 新增旅伴
         </h3>
         <div className="flex gap-3">
-          <input 
-            type="text" 
-            placeholder="輸入姓名..." 
+          <input
+            type="text"
+            placeholder="輸入姓名..."
             className="flex-1 bg-slate-50 border border-slate-100 px-5 py-3.5 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-blue-500/20"
             value={name}
             onChange={e => setName(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleAdd()}
           />
-          <button 
+          <button
             onClick={handleAdd}
             disabled={!name.trim()}
             className="bg-blue-600 text-white p-4 rounded-2xl shadow-lg shadow-blue-200 active:scale-90 transition-transform disabled:opacity-50"
@@ -395,7 +396,7 @@ const MembersView = ({
               </div>
             </div>
             {idx !== 0 && (
-              <button 
+              <button
                 onClick={() => onRemove(m.id)}
                 className="p-3 text-slate-200 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all"
               >
@@ -409,14 +410,14 @@ const MembersView = ({
   );
 };
 
-const TripSelectorView = ({ 
-  trips, 
-  onSelect, 
-  onAdd, 
-  onDelete 
-}: { 
-  trips: Trip[]; 
-  onSelect: (id: string) => void; 
+const TripSelectorView = ({
+  trips,
+  onSelect,
+  onAdd,
+  onDelete
+}: {
+  trips: Trip[];
+  onSelect: (id: string) => void;
   onAdd: (name: string) => void;
   onDelete: (id: string) => void;
 }) => {
@@ -453,7 +454,7 @@ const TripSelectorView = ({
                 </button>
               )}
             </div>
-            <button 
+            <button
               onClick={() => onSelect(t.id)}
               className="w-full py-3 bg-blue-600 text-white rounded-2xl text-xs font-black shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all"
             >
@@ -466,14 +467,14 @@ const TripSelectorView = ({
       <div className="bg-slate-100 p-6 rounded-[32px] space-y-4">
         <p className="text-xs font-black text-slate-500 uppercase tracking-widest px-1">建立新旅程</p>
         <div className="flex gap-3">
-          <input 
-            type="text" 
-            placeholder="行程名稱，如：曼谷自由行" 
+          <input
+            type="text"
+            placeholder="行程名稱，如：曼谷自由行"
             className="flex-1 bg-white border border-slate-200 px-4 py-3 rounded-2xl font-bold outline-none"
             value={newTripName}
             onChange={e => setNewTripName(e.target.value)}
           />
-          <button 
+          <button
             onClick={() => {
               if (newTripName.trim()) {
                 onAdd(newTripName.trim());
@@ -516,7 +517,7 @@ const App: React.FC = () => {
   const [tempTripName, setTempTripName] = useState('');
   const [filterCategory, setFilterCategory] = useState<string>('全部');
   const [selectedExpenseId, setSelectedExpenseId] = useState<string | null>(null);
-  
+
   const editInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -570,8 +571,8 @@ const App: React.FC = () => {
     });
 
     const results: Settlement[] = [];
-    const debtors = activeTrip.members.map(m => ({ ...m, balance: balances[m.id] || 0 })).filter(m => m.balance < -0.01).sort((a,b) => a.balance - b.balance);
-    const creditors = activeTrip.members.map(m => ({ ...m, balance: balances[m.id] || 0 })).filter(m => m.balance > 0.01).sort((a,b) => b.balance - a.balance);
+    const debtors = activeTrip.members.map(m => ({ ...m, balance: balances[m.id] || 0 })).filter(m => m.balance < -0.01).sort((a, b) => a.balance - b.balance);
+    const creditors = activeTrip.members.map(m => ({ ...m, balance: balances[m.id] || 0 })).filter(m => m.balance > 0.01).sort((a, b) => b.balance - a.balance);
 
     let i = 0, j = 0;
     while (i < debtors.length && j < creditors.length) {
@@ -589,7 +590,7 @@ const App: React.FC = () => {
     // 更新專案是否全數結清狀態
     const completedKeys = activeTrip.completedSettlementKeys || [];
     const isFullySettled = results.length > 0 && results.every(s => completedKeys.includes(s.key));
-    
+
     // 如果結果改變且偵測到全數結清，需要回流更新 trips 狀態 (這裡簡化，讓 UI 反映)
     return results;
   }, [activeTrip]);
@@ -640,10 +641,10 @@ const App: React.FC = () => {
     setTrips(prev => prev.map(t => {
       if (t.id !== activeTripId) return t;
       const currentKeys = t.completedSettlementKeys || [];
-      const newKeys = currentKeys.includes(key) 
+      const newKeys = currentKeys.includes(key)
         ? currentKeys.filter(k => k !== key)
         : [...currentKeys, key];
-      
+
       // 重新計算是否全數結清
       // 這裡計算比較複雜，我們先只存 key
       return { ...t, completedSettlementKeys: newKeys };
@@ -710,7 +711,7 @@ const App: React.FC = () => {
       {view !== 'add' && view !== 'trip-selector' && (
         <header className="bg-blue-600 text-white p-6 rounded-b-[40px] shadow-xl relative z-10">
           <div className="flex justify-between items-center mb-6">
-            <button 
+            <button
               onClick={() => setView('trip-selector')}
               className="flex items-center gap-2 p-2 bg-white/20 rounded-2xl hover:bg-white/30 transition-all border border-white/10"
             >
@@ -739,9 +740,9 @@ const App: React.FC = () => {
               )}
             </div>
             {/* 移除設定按鈕 */}
-            <div className="w-10"></div> 
+            <div className="w-10"></div>
           </div>
-          
+
           <div className="bg-white/10 p-5 rounded-3xl backdrop-blur-xl border border-white/20 shadow-inner">
             <div className="flex justify-between items-end">
               <div>
@@ -753,7 +754,7 @@ const App: React.FC = () => {
               </div>
               <div className="text-right">
                 <p className="text-[10px] text-blue-100 font-bold mb-1 opacity-80 uppercase tracking-widest">結算幣別</p>
-                <select 
+                <select
                   className="bg-white/20 text-white border-none text-sm font-black rounded-xl px-3 py-1.5 outline-none appearance-none cursor-pointer"
                   value={activeTrip.baseCurrency}
                   onChange={e => updateBaseCurrency(e.target.value)}
@@ -770,17 +771,26 @@ const App: React.FC = () => {
       <main className="mt-4 px-4 flex-1 overflow-y-auto pb-10">
         {view === 'expenses' && (
           <div className="space-y-4 pb-10">
-            {/* Category Filter */}
-            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide px-1">
-              {['全部', ...Object.values(Category)].map(cat => (
-                <button
-                  key={cat}
-                  onClick={() => setFilterCategory(cat)}
-                  className={`px-4 py-2 rounded-full text-xs font-black whitespace-nowrap transition-all border shadow-sm ${filterCategory === cat ? 'bg-blue-600 border-blue-600 text-white scale-105' : 'bg-white border-slate-100 text-slate-500 hover:border-blue-200'}`}
+            {/* Category Filter - Redesigned */}
+            <div className="flex items-center gap-2 px-1">
+              <div className="relative flex-1">
+                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <select
+                  value={filterCategory}
+                  onChange={(e) => setFilterCategory(e.target.value)}
+                  className="w-full bg-white border border-slate-200 pl-10 pr-4 py-2.5 rounded-2xl text-sm font-bold text-slate-700 outline-none appearance-none shadow-sm"
                 >
-                  {cat === '全部' ? '全部' : `${CATEGORY_ICONS[cat as Category]} ${cat}`}
-                </button>
-              ))}
+                  <option value="全部">全部類別</option>
+                  {Object.values(Category).map(cat => (
+                    <option key={cat} value={cat}>
+                      {CATEGORY_ICONS[cat as Category]} {cat}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                  <ChevronRight className="w-4 h-4 rotate-90" />
+                </div>
+              </div>
             </div>
 
             <div className="flex justify-between items-center px-1">
@@ -802,8 +812,8 @@ const App: React.FC = () => {
               </div>
             ) : (
               filteredExpenses.map(exp => (
-                <div 
-                  key={exp.id} 
+                <div
+                  key={exp.id}
                   onClick={() => setSelectedExpenseId(exp.id)}
                   className="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex items-center gap-4 group hover:shadow-md transition-all cursor-pointer active:scale-95"
                 >
@@ -869,8 +879,8 @@ const App: React.FC = () => {
                 settlements.map((s) => {
                   const isDone = activeTrip.completedSettlementKeys?.includes(s.key);
                   return (
-                    <div 
-                      key={s.key} 
+                    <div
+                      key={s.key}
                       onClick={() => toggleSettlementAction(s.key)}
                       className={`p-6 rounded-[32px] shadow-sm border transition-all relative group cursor-pointer active:scale-95 ${isDone ? 'bg-slate-50 border-slate-100' : 'bg-white border-blue-100'}`}
                     >
@@ -927,20 +937,20 @@ const App: React.FC = () => {
         {view === 'members' && <MembersView members={activeTrip.members} onAdd={addMember} onRemove={removeMember} />}
         {view === 'add' && <ExpenseForm trip={activeTrip} onSave={saveExpense} onCancel={() => setView('expenses')} />}
         {view === 'trip-selector' && (
-          <TripSelectorView 
-            trips={trips} 
-            onSelect={(id) => { setActiveTripId(id); setView('expenses'); }} 
-            onAdd={addTrip} 
-            onDelete={deleteTrip} 
+          <TripSelectorView
+            trips={trips}
+            onSelect={(id) => { setActiveTripId(id); setView('expenses'); }}
+            onAdd={addTrip}
+            onDelete={deleteTrip}
           />
         )}
       </main>
 
       {/* Expense Detail Modal */}
       {selectedExpense && (
-        <ExpenseDetailView 
-          expense={selectedExpense} 
-          members={activeTrip.members} 
+        <ExpenseDetailView
+          expense={selectedExpense}
+          members={activeTrip.members}
           onClose={() => setSelectedExpenseId(null)}
           onDelete={deleteExpense}
         />
@@ -957,7 +967,7 @@ const App: React.FC = () => {
             <ArrowLeftRight className="w-6 h-6" />
             <span className="text-[10px] font-black uppercase tracking-tight">結算</span>
           </button>
-          
+
           <div className="relative -top-12">
             <button onClick={() => setView('add')} className="w-16 h-16 bg-blue-600 text-white rounded-[24px] flex items-center justify-center shadow-2xl shadow-blue-300 active:scale-90 transition-all hover:bg-blue-700">
               <Plus className="w-8 h-8" />
